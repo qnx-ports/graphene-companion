@@ -1,0 +1,30 @@
+From dc331e2a0476bb8c32f46f51c32534191de667c8 Mon Sep 17 00:00:00 2001
+From: Felix Xing <fxing@qnx.com>
+Date: Tue, 21 Jan 2025 12:45:27 -0500
+Subject: [PATCH 8/8] remove finite-math-only flag
+
+---
+ meson.build | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index e793d66..8cb8c45 100644
+--- a/meson.build
++++ b/meson.build
+@@ -84,7 +84,12 @@ if cc.get_id() == 'msvc'
+   ]
+ else
+   test_cflags = [
+-    '-ffast-math',
++    '-fno-math-errno', 
++    '-funsafe-math-optimizations', 
++    # '-ffinite-math-only', 
++    '-fno-rounding-math', 
++    '-fno-signaling-nans',
++    '-fcx-limited-range',
+     '-fstrict-aliasing',
+     '-Wpointer-arith',
+     '-Wstrict-prototypes',
+-- 
+2.50.1.windows.1
+

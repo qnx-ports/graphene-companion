@@ -1,0 +1,39 @@
+# Alpine-Contributor: Rasmus Thomsen <oss@cogitri.dev>
+# Alpine-Maintainer: Natanael Copa <ncopa@alpinelinux.org>
+# Maintainer: Felix Xing <fxing@qnx.com>
+pkgname=graphene
+pkgver=1.10.8
+pkgrel=0
+pkgdesc="A thin layer of graphic data types"
+url="http://ebassi.github.io/graphene/"
+arch="all"
+license="MIT"
+depends="glib"
+makedepends="meson glib-dev gobject-introspection-dev"
+options="!check"
+subpackages="$pkgname-dev"
+source="https://github.com/ebassi/graphene/archive/$pkgver/graphene-$pkgver.tar.gz
+        0007-remove-obsolete-isinff-calls.patch
+        0008-remove-finite-math-only-flag.patch
+"
+
+build() {
+    abuild-meson \
+        -Db_lto=false \
+        -Darm_neon=true \
+        -Dinstalled_tests=false \
+        -Dintrospection=enabled \
+        -Dtests=false \
+        . output
+    meson compile -C output
+}
+
+package() {
+    DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+526b0c17049459b687ceb7f6c26c9d982535e4048e74a0b6282704f9811d3c2e7e0e6cfef166aa953306b6cf77add6677bc600ae0c66cc052dc04c3d0345bd68  graphene-1.10.8.tar.gz
+6ec1e70bc20d72c6defa17276ae76d363a795bc0d17d7c63bc6a575b5684eefca6ac4ba11ceb80f18ae40a1a5c7274df11110942897cf8639ecdf39bf37147c4  0007-remove-obsolete-isinff-calls.patch
+b3c6d4b3cefc591b2f6442100880912ed7176fd596a9e724fdb4c3c0240b3517bcce3b092b7cbe3690fef7e6fc1b278eeadcdd551cb79821f4871343a3ae4387  0008-remove-finite-math-only-flag.patch
+"
